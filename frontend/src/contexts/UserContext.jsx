@@ -5,20 +5,28 @@ export const UserContext = createContext();
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  // Optional: persist user in localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+  
+    if (storedUser && storedToken) {
+      const userObj = JSON.parse(storedUser);
+      userObj.token = storedToken; // ✅ inject token into user
+      setUser(userObj);
+    }
   }, []);
+  
 
-  function login(userData) {
+  function login(userData, token) {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
   }
 
   function logout() {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   }
 
   return (

@@ -17,7 +17,7 @@ function LoginModal({ onClose }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Login failed');
-      login(data);
+      login(data.user, data.token);
       onClose();
     } catch (err) {
       setError(err.message);

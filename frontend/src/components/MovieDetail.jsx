@@ -21,7 +21,7 @@ function MovieDetail() {
       setShowLogin(true);
     } else {
       // Navigate to booking page for the showtime
-      navigate(`/bookings/${showtimeId}`);
+      navigate(`/now-showing/${id}/${showtimeId}`);
     }
   }
 
@@ -31,12 +31,18 @@ function MovieDetail() {
         const res = await fetch(`http://localhost:5000/now-showing/${id}`);
         if (!res.ok) throw new Error('Movie not found');
         const data = await res.json();
-        setMovie(data);
-
-        const showRes = await fetch(`http://localhost:5000/now-showing/${id}/showtimes`);
-        const showData = await showRes.json();
-
-        // Group by date and filter next 4 days including today
+  
+        // Set movie info
+        setMovie({
+          id: data.id,
+          title: data.title,
+          duration: data.duration,
+          description: data.description,
+          poster_url: data.poster_url,
+          genre: data.genre,
+        });
+  
+        // Process showtimes (already included in `data`)
         const grouped = {};
         const today = new Date();
         const next4Days = Array.from({ length: 4 }, (_, i) => {
@@ -44,15 +50,15 @@ function MovieDetail() {
           d.setDate(d.getDate() + i);
           return d.toDateString();
         });
-
-        showData.forEach(show => {
+  
+        data.showtimes.forEach(show => {
           const dateStr = new Date(show.start_time).toDateString();
           if (next4Days.includes(dateStr)) {
             if (!grouped[dateStr]) grouped[dateStr] = [];
             grouped[dateStr].push(show);
           }
         });
-
+  
         setShowtimes(grouped);
       } catch (err) {
         setError(err.message);
@@ -60,6 +66,7 @@ function MovieDetail() {
         setLoading(false);
       }
     }
+  
     fetchMovie();
   }, [id]);
 
@@ -77,7 +84,7 @@ function MovieDetail() {
           className="w-full rounded-xl shadow-lg"
         />
 
-        {/* Movie Info + Admin Editing */ }
+        {/* Movie Info*/ }
         <div className="pl-8">
           <h1 className="text-3xl font-bold mb-4">{movie.title}</h1>
           <p className="mb-3"><strong>Duration:</strong> {movie.duration} minutes</p>

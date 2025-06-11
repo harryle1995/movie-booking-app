@@ -1,6 +1,9 @@
 import express from 'express';
 import pool from '../db.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
@@ -35,14 +38,30 @@ router.post('/login', async (req, res) => {
       // Username does not exist
       return res.status(400).json({ message: 'Username does not exist' });
     }
+
     const user = userRes.rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       // Password incorrect
       return res.status(400).json({ message: 'Incorrect password' });
     }
-    // Successful login
-    res.json({ id: user.id, username: user.username, is_admin: user.is_admin });
+    console.log("JWT secret:", process.env.JWT_SECRET);
+    // ✅ Generate JWT
+    const token = jwt.sign(
+      { id: user.id, username: user.username, is_admin: user.is_admin },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Successful login// ✅ Send token and user data
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        is_admin: user.is_admin
+      }
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

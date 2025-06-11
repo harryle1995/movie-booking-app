@@ -28,29 +28,32 @@ export async function generateDummyShowtimes() {
     for (const movie of movies) {
       for (let dayOffset = 0; dayOffset < 3; dayOffset++) {
         for (const hour of showtimeHours) {
+          const startTime = getShowtimeDate(dayOffset, hour).toISOString();
           inserts.push({
             movie_id: movie.id,
-            start_time: getShowtimeDate(dayOffset, hour).toISOString()
+            start_time: startTime
           });
         }
       }
     }
 
-    const values = inserts
-      .map((_, i) => `($${i * 2 + 1}, $${i * 2 + 2})`)
-      .join(', ');
-
-    const params = [];
-    inserts.forEach(({ movie_id, start_time }) => {
-      params.push(movie_id, start_time);
-    });
-
-    await pool.query(
-      `INSERT INTO showtimes (movie_id, start_time) VALUES ${values}`,
-      params
-    );
-
-    console.log(`Inserted ${inserts.length} dummy showtimes`);
+    // Remove duplicates before inserting
+    for (const showtime of inserts) {
+      const { movie_id, start_time } = showtime;
+      const exists = await pool.query(
+        'SELECT 1 FROM showtimes WHERE movie_id = $1 AND start_time = $2',
+        [movie_id, start_time]
+      );
+      if (exists.rows.length === 0) {
+        await pool.query(
+          'INSERT INTO showtimes (movie_id, start_time) VALUES ($1, $2)',
+          [movie_id, start_time]
+        );
+        console.log(`Inserted showtime: movie_id=${movie_id}, start_time=${start_time}`);
+      } else {
+        console.log(`Skipped duplicate showtime: movie_id=${movie_id}, start_time=${start_time}`);
+      }
+    }
   } catch (err) {
     console.error('Error generating dummy showtimes:', err);
   }

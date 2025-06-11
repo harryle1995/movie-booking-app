@@ -5,10 +5,13 @@ import cron from 'node-cron';
 
 import moviesRoute from './routes/movies.js';
 import authRoutes from './routes/auth.js';
+import movieListEditorRoutes from './routes/movielisteditor.js';
+import showtimesRoutes from './routes/showtimes.js';
 import { generateDummyShowtimes } from './scripts/maintainShowtimes.js';
 
 dotenv.config();
 
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 // Middleware
@@ -21,8 +24,8 @@ app.get('/', (req, res) => {
 });
 app.use('/now-showing', moviesRoute);
 app.use('/auth', authRoutes);
-
-const PORT = process.env.PORT || 5000;
+app.use('/admin/editing', movieListEditorRoutes);
+app.use('/booking/showtimes', showtimesRoutes);
 
 app.listen(PORT, async () => {
   console.log(`✅ Server listening on http://localhost:${PORT}`);

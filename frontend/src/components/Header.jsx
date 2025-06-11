@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import TheatersIcon from '@mui/icons-material/Theaters';
-import Button from '@mui/material/Button';
+import TheatersIcon from "@mui/icons-material/Theaters";
+import Button from "@mui/material/Button";
 import { UserContext } from "../contexts/UserContext.jsx";
-import RegisterModal from './RegisterModal.jsx';
-import LoginModal from './LoginModal.jsx';
+import RegisterModal from "./RegisterModal.jsx";
+import LoginModal from "./LoginModal.jsx";
 
 function Header() {
   const navigate = useNavigate();
@@ -22,23 +22,37 @@ function Header() {
           whileTap={{ scale: 1.2, opacity: 0.6 }}
           className="cursor-pointer transition duration-300 hover:drop-shadow-[0_0_6px_white]"
         >
-          <TheatersIcon sx={{ fontSize: 96, color: '#FEF08A' }} />
+          <TheatersIcon sx={{ fontSize: 96, color: "#FEF08A" }} />
         </motion.div>
 
         <Button
           variant="text"
-          sx={{ color: '#FEF08A', ml: 4 }}
-          onClick={() => navigate('/now-showing')}
+          sx={{ color: "#FEF08A", ml: 4 }}
+          onClick={() => navigate("/now-showing")}
         >
           NOW SHOWING
         </Button>
 
-        <Button
-          variant="text"
-          sx={{ color: '#FEF08A', ml: 3 }}
-        >
+        <Button variant="text" sx={{ color: "#FEF08A", ml: 3 }}>
           UPCOMING
         </Button>
+
+        {user?.is_admin && (
+          <Button
+            variant="contained"
+            sx={{
+              ml: 3,
+              backgroundColor: 'green',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#056e3f',
+              },
+            }}
+            onClick={() => navigate('/admin/editing')}
+          >
+            Editing Movie List
+          </Button>
+)}
       </div>
 
       {/* Right Auth Buttons */}
@@ -47,24 +61,43 @@ function Header() {
           <>
             <span className="text-amber-200 text-sm">Hi, {user.username}</span>
 
-            <Button
-              variant="outlined"
-              sx={{
-                color: '#FEF08A',
-                borderColor: '#FEF08A',
-                '&:hover': {
-                  borderColor: '#fcd34d',
-                  backgroundColor: 'rgba(252, 211, 77, 0.08)',
-                }
-              }}
-              onClick={() => navigate(user.is_admin ? '/admin/bookings' : '/my-bookings')}
-            >
-              {user.is_admin ? 'Manage Bookings' : 'My Bookings'}
-            </Button>
+            {user.is_admin ? (
+              <>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: "#FEF08A",
+                    borderColor: "#FEF08A",
+                    "&:hover": {
+                      borderColor: "#fcd34d",
+                      backgroundColor: "rgba(252, 211, 77, 0.08)",
+                    },
+                  }}
+                  onClick={() => navigate("/admin/bookings")}
+                >
+                  Manage Bookings
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="outlined"
+                sx={{
+                  color: "#FEF08A",
+                  borderColor: "#FEF08A",
+                  "&:hover": {
+                    borderColor: "#fcd34d",
+                    backgroundColor: "rgba(252, 211, 77, 0.08)",
+                  },
+                }}
+                onClick={() => navigate("/my-bookings")}
+              >
+                My Bookings
+              </Button>
+            )}
 
             <Button
               variant="contained"
-              sx={{ backgroundColor: '#fde68a', color: 'black' }}
+              sx={{ backgroundColor: "#fde68a", color: "black" }}
               onClick={logout}
             >
               Logout
@@ -75,12 +108,12 @@ function Header() {
             <Button
               variant="outlined"
               sx={{
-                color: '#FEF08A',
-                borderColor: '#FEF08A',
-                '&:hover': {
-                  borderColor: '#fcd34d',
-                  backgroundColor: 'rgba(252, 211, 77, 0.08)',
-                }
+                color: "#FEF08A",
+                borderColor: "#FEF08A",
+                "&:hover": {
+                  borderColor: "#fcd34d",
+                  backgroundColor: "rgba(252, 211, 77, 0.08)",
+                },
               }}
               onClick={() => setShowLogin(true)}
             >
@@ -89,7 +122,7 @@ function Header() {
 
             <Button
               variant="contained"
-              sx={{ backgroundColor: '#fde68a', color: 'black' }}
+              sx={{ backgroundColor: "#fde68a", color: "black" }}
               onClick={() => setShowRegister(true)}
             >
               Register
