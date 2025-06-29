@@ -10,11 +10,8 @@ const { Pool } = pkg;
 
 // Create a connection pool to the PostgreSQL database
 const pool = new Pool({
-  user: process.env.DB_USER,       // e.g., 'postgres'
-  host: process.env.DB_HOST,       // e.g., 'localhost' or your cloud DB address
-  database: process.env.DB_DATABASE, // e.g., 'moviebooking'
-  password: process.env.DB_PASSWORD, // Secure DB password stored in .env
-  port: process.env.DB_PORT,       // Default PostgreSQL port is 5432
+  connectionString: process.env.DATABASE_URL,  // Works for both local and Render
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
 // Export the pool instance to reuse across the backend (routes, services, etc.)
