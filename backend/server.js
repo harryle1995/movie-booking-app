@@ -29,7 +29,15 @@ const app = express();
 /* ------------------- MIDDLEWARE ------------------- */
 
 // Enable Cross-Origin Resource Sharing (CORS) to allow frontend to access backend
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://movie-booking-app-iota-murex.vercel.app"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 // Parse incoming JSON request bodies
 app.use(express.json());
