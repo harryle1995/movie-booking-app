@@ -5,13 +5,14 @@ export default function BookingHistory() {
   const [bookings, setBookings] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
+  const API = import.meta.env.VITE_API_URL;
   
 
   useEffect(() => {
     if (!userId) return;
     async function fetchBookings() {
       try {
-        const res = await axios.get(`http://localhost:5000/user/bookings/${userId}`);
+        const res = await axios.get(`${API}/user/bookings/${userId}`);
         setBookings(res.data);
       } catch (err) {
         console.error('Failed to fetch booking history:', err);

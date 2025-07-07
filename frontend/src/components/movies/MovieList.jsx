@@ -7,12 +7,13 @@ import { Link } from 'react-router-dom';
 function MovieList() {
   const [movies, setMovies] = useState([]); 
   const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null);  
+  const [error, setError] = useState(null);
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const res = await fetch('http://localhost:5000/movies');
+        const res = await fetch(`${API}/movies`);
         if (!res.ok) throw new Error('Network response was not ok');
         const data = await res.json();
         setMovies(data);

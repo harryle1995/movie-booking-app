@@ -21,15 +21,16 @@ export default function TicketBooking() {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
   const seats = generateSeats();
+  const API = import.meta.env.VITE_API_URL;
 
   // Load movie info and already-booked seats
   useEffect(() => {
-    fetch(`http://localhost:5000/booking/showtimes/${showtimeId}`)
+    fetch(`${API}/booking/showtimes/${showtimeId}`)
       .then((res) => res.json())
       .then((data) => setShowtimeInfo(data))
       .catch((err) => console.error("Error fetching showtime info:", err));
 
-    fetch(`http://localhost:5000/booking/showtimes/${showtimeId}/seats`)
+    fetch(`${API}/booking/showtimes/${showtimeId}/seats`)
       .then((res) => res.json())
       .then((data) => setBookedSeats(data.bookedSeats))
       .catch((err) => console.error("Error fetching booked seats:", err));
@@ -70,7 +71,7 @@ export default function TicketBooking() {
 
     try {
       // Create Checkout Session with backend
-      const response = await fetch('http://localhost:5000/stripe/create-payment-intent', {
+      const response = await fetch(`${API}/stripe/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

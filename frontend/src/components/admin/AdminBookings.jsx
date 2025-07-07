@@ -6,6 +6,7 @@ export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!user?.is_admin) {
@@ -15,7 +16,7 @@ export default function AdminBookings() {
 
     async function fetchAllBookings() {
       try {
-        const res = await axios.get('http://localhost:5000/admin/bookings', {
+        const res = await axios.get(`${API}/admin/bookings`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setBookings(res.data);

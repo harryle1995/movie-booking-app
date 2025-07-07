@@ -17,13 +17,15 @@ function MovieListEditor() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState(null);
 
+  const API = import.meta.env.VITE_API_URL;
+
   /* ------------------- FETCH MOVIES ------------------- */
   useEffect(() => {
     if (!user?.token) return; // 🔒 Skip if not logged in
 
     async function fetchMovies() {
       try {
-        const res = await fetch('http://localhost:5000/admin/editing', {
+        const res = await fetch(`${API}/admin/editing`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -46,7 +48,7 @@ function MovieListEditor() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/admin/editing${isNew ? '' : `/${movieData.id}`}`,
+        `${API}/admin/editing${isNew ? '' : `/${movieData.id}`}`,
         {
           method: isNew ? 'POST' : 'PUT',
           headers: {
@@ -82,7 +84,7 @@ function MovieListEditor() {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/admin/editing/${movieToDelete}`, {
+      const res = await fetch(`${API}/admin/editing/${movieToDelete}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${user.token}`,

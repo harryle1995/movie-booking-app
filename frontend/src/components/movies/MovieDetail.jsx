@@ -15,6 +15,7 @@ function MovieDetail() {
   const [showLogin, setShowLogin] = useState(false);
   const [editMovie, setEditMovie] = useState({});
   const [editing, setEditing] = useState(false);
+  const API = import.meta.env.VITE_API_URL;
 
   function handleShowtimeClick(showtimeId) {
     if (!user) {
@@ -28,7 +29,7 @@ function MovieDetail() {
   useEffect(() => {
     async function fetchMovie() {
       try {
-        const res = await fetch(`http://localhost:5000/movies/${id}`);
+        const res = await fetch(`${API}/movies/${id}`);
         if (!res.ok) throw new Error('Movie not found');
         const data = await res.json();
   

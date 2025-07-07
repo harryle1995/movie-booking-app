@@ -7,6 +7,7 @@ function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [hasConfirmed, setHasConfirmed] = useState(false); // ✅ Prevent double call
+  const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
@@ -18,12 +19,12 @@ function PaymentSuccess() {
         console.log("Session ID from URL:", sessionId);
 
         // Step 1: Get session details from Stripe
-        const sessionRes = await fetch(`http://localhost:5000/stripe/session/${sessionId}`);
+        const sessionRes = await fetch(`${API}/stripe/session/${sessionId}`);
         const sessionData = await sessionRes.json();
         console.log("Fetched session:", sessionData);
 
         // Step 2: Confirm payment with your backend
-        const confirmRes = await fetch("http://localhost:5000/stripe/confirm-payment", {
+        const confirmRes = await fetch(`${API}/stripe/confirm-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sessionId }),

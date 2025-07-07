@@ -14,13 +14,15 @@ function LoginModal({ onClose }) {
   // State for displaying login error messages
   const [error, setError] = useState('');
 
+  const API = import.meta.env.VITE_API_URL;
+
   // Handle form submission
   async function handleSubmit(e) {
     e.preventDefault(); // Prevent default form refresh
 
     try {
       // Send login credentials to backend
-      const res = await fetch('http://localhost:5000/auth/login', {
+      const res = await fetch(`${API}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

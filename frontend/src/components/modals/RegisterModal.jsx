@@ -8,6 +8,7 @@ function RegisterModal({ onClose }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const API = import.meta.env.VITE_API_URL;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -20,7 +21,7 @@ function RegisterModal({ onClose }) {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/auth/register', {
+      const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
