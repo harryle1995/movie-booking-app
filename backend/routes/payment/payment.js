@@ -7,6 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 router.post('/create-checkout-session', async (req, res) => {
   const { quantity } = req.body;
+  const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -24,8 +25,8 @@ router.post('/create-checkout-session', async (req, res) => {
           quantity,
         },
       ],
-      success_url: 'http://localhost:5173/success',
-      cancel_url: 'http://localhost:5173/cancel',
+      success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${FRONTEND_URL}/payment-cancel`,
     });
 
     res.json({ url: session.url });
