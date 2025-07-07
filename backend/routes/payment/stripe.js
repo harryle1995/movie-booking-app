@@ -30,6 +30,7 @@ router.get("/session/:sessionId", async (req, res) => {
 // ==========================
 router.post("/create-payment-intent", async (req, res) => {
   const { userId, showtimeId, selectedSeats } = req.body;
+  const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
   try {
     const ticketPriceCents = 1000;
@@ -46,8 +47,8 @@ router.post("/create-payment-intent", async (req, res) => {
           quantity: selectedSeats.length,
         },
       ],
-      success_url: "http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:5173/payment-cancelled",
+      success_url: `${FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${FRONTEND_URL}/payment-cancelled`,
       metadata: {
         userId,
         showtimeId,
