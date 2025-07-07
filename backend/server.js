@@ -67,9 +67,6 @@ app.use('/booking/showtimes', showtimesRoutes);
 // Route for user's booking history
 app.use('/user/bookings', userBookingRoutes);
 
-// Route for payment
-app.use('/payment', paymentRoutes);
-
 // Stripe payment handler
 app.use("/stripe", stripeRoutes);
 
