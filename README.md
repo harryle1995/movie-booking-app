@@ -4,7 +4,11 @@
 
 ## 🔗 Live Demo
 
-You can try the app here: [Live Demo](https://movie-booking-app-yipu.vercel.app)
+You can try the app here: [Live Demo](https://movie-booking-app-iota-murex.vercel.app/)
+
+{username: abc, password: 123}
+{username: def, password: 456} 
+{username: admin, password: admin} 
 
 ## 📝 Project Description
 
