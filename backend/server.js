@@ -10,7 +10,6 @@ import authRoutes from './routes/auth/auth.js';
 import movieListEditorRoutes from './routes/admin/movieAdminRoute.js';
 import showtimesRoutes from './routes/user/showtimes.js';
 import userBookingRoutes from './routes/user/userBookings.js';
-import paymentRoutes from './routes/payment/payment.js';
 import stripeRoutes from "./routes/payment/stripe.js";
 import bookingAdminRoute from './routes/admin/bookingAdminRoute.js';
 
